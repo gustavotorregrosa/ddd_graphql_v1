@@ -1,15 +1,23 @@
-import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
+import { Args, Mutation, Query, Resolver, Subscription } from "@nestjs/graphql";
 import { CategoryInfra } from "./nestjs.class";
 import { CreateCategoryInputType } from "./create-category.input.graphql";
 import { EditCategoryInputType } from "./edit-category.input.graphql";
 import { CategoryService } from "./service";
 import { DeleteCategoryInputType } from "./delete-category.input.graphql";
 import { ProductInfra } from "../product/nestjs.class";
+import {PubSub} from 'graphql-subscriptions'
+
+const pubSub = new PubSub()
 
 @Resolver()
 export class CategoryResolver {
 
     constructor(private service: CategoryService){}
+
+    @Subscription(returns => CategoryInfra)
+    categoryAdded(){
+        return pubSub.asyncIterator('categoryAdded')
+    }
 
     @Query(returns => [CategoryInfra])
     async getAllCategories(){
@@ -23,7 +31,10 @@ export class CategoryResolver {
 
     @Mutation(returns => CategoryInfra)
     async createCategory(@Args('category') category: CreateCategoryInputType){
-        return await this.service.createOne(new CategoryInfra('', category.name, category.description))
+        const categoryAdded =  await this.service.createOne(new CategoryInfra('', category.name, category.description))
+        await pubSub.publish('categoryAdded', { categoryAdded })
+        return categoryAdded
+
     }
 
     @Mutation(returns => CategoryInfra)

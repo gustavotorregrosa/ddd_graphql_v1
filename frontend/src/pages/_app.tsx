@@ -9,21 +9,26 @@ import '@fontsource/roboto/700.css';
 import { Button, Container, Grid} from '@mui/material'
 import '../styles/custom.css'
 import { wrapper } from '../store'
+import { ApolloProvider } from '@apollo/client';
+import client from '@/graphql/client.graphql';
 
 
 function MyApp({ Component, pageProps }: AppProps) {
   return <>
-    <Head>
-        <title>Stock Management Tool</title>
-        <meta name="description" content="Created by gustavo torregrosa" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.png" />
-    </Head>
-    <Navbar />
-    <Container maxWidth="lg">
-      <br/><br/><br/>
-      <Component {...pageProps} />
-    </Container>
+    <ApolloProvider client={client}>
+      <Head>
+          <title>Stock Management Tool</title>
+          <meta name="description" content="Created by gustavo torregrosa" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link rel="icon" href="/favicon.png" />
+      </Head>
+      <Navbar />
+      <Container maxWidth="lg">
+        <br/><br/><br/>
+        <Component {...pageProps} />
+      </Container>
+    </ApolloProvider>
+   
   </>
 }
 

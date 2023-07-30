@@ -10,8 +10,18 @@ import { DeleteModal } from './deleteModal';
 import { Button, Grid } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
 import { createOne, del, edit, getAll, getCategoryWithProducts } from '@/services/category.service';
+import { useSubscription } from '@apollo/client';
+import { CATEGORY_ADDED_SUBSCRIPTION } from '@/subscriptions/category.subscription';
 
 export default function Categories(){
+
+    const { data, loading, error } = useSubscription(CATEGORY_ADDED_SUBSCRIPTION)
+
+    // const readAllCategories = async () => {
+    //     const allCategories: ICategory[] = await getAll()
+    //     console.log({allCategories})
+    //     dispatch(categoriesSet(allCategories))
+    // }
 
     useEffect(() => {
         (async () => {
@@ -19,6 +29,23 @@ export default function Categories(){
             dispatch(categoriesSet(allCategories))
         })()
     }, [])
+
+    useEffect(() => {
+        console.log({data})
+        console.log({error})
+        console.log({loading})
+        
+        
+        if(data){
+            console.log(data.categoryAdded.name)
+            dispatch(categoryInsert(data.categoryAdded))
+            // setTimeout(() => {
+            //     readAllCategories()
+            // }, 2000)
+        }
+
+  
+      }, [data, loading, error])
 
 
     const columns: column[] = [

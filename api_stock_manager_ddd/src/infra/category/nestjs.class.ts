@@ -13,7 +13,7 @@ export class CategoryInfra extends Category{
     public name: string
 
     @Field()
-    public description: string
+    public description?: string
 
     @Field(type => [ProductInfra], {nullable: true})
     public products: Product[]

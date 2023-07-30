@@ -15,6 +15,11 @@ const reducer = (state: State = initialState, action: IAction) => {
             ]
         case types.INSERT_NEW_CATEGORY:
             const newCategory = action.payload
+
+            if(state.find(cat => cat.id == newCategory.id)){
+                return [...state]
+            }
+            
             return [
                 ...state,
                 newCategory

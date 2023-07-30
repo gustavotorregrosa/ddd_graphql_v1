@@ -1,8 +1,6 @@
 import { ICategory } from '@/interfaces/category.interface';
 import client from '../graphql/client.graphql'
-import { gql, useMutation } from "@apollo/client"
-
-
+import { gql } from "@apollo/client"
 
 export async function getAll(): Promise<ICategory[]> {
     const { data } = await client.query({

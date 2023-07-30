@@ -5,7 +5,7 @@ export class Category implements ICategory {
     
     public products: Product[] = []
     
-    constructor(public id: string, public name: string, public description: string){}
+    constructor(public id: string, public name: string, public description?: string){}
 
     public attachProduct = (product: Product) => this.products.push(product)
 
